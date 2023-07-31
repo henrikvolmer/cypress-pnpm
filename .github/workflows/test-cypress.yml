@@ -1,0 +1,24 @@
+name: test-cypress
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test-cypress:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/included:latest
+    steps:
+      - name: checkout project
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.10
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm serve & pnpm cypress
+        env:
+          CI: true
